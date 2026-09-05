@@ -19,9 +19,13 @@ Failed payments = lost revenue. Most of the time it's not fraud or anything scar
 
 ## Results from a test run
 
-- 7 failed payments processed
-- 3 recovered (42.9%)
-- ₹2,997 recovered out of ₹8,493 that was stuck
+Since the mock data is randomly generated, numbers change a bit each run, but a typical run looks like:
+
+- 5-7 failed payments processed
+- 40-65% recovered
+- A few thousand rupees recovered out of what was stuck
+
+Check `report.html` after running it yourself for the actual numbers from that run.
 
 ## How it's built
 
