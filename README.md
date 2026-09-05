@@ -1,4 +1,4 @@
-# PayBack - Automated Payment Recovery Agent
+# PayBack: Automated Payment Recovery Agent
 
 Built for the Razorpay AI Builder Buildathon 2026 (Track 03).
 

@@ -33,7 +33,7 @@ Payment details:
 
 Decide the best recovery action from these options only:
 - "retry": if the failure was likely transient (e.g. bank timeout, gateway error) and retrying now could work
-- "send_reminder": if the customer needs to take action (e.g. insufficient funds, OTP failed, card expired) — send them a payment link reminder
+- "send_reminder": if the customer needs to take action (e.g. insufficient funds, OTP failed, card expired) send them a payment link reminder
 - "escalate": if this looks like fraud, repeated failure, or needs human review
 
 Respond with ONLY this JSON structure, nothing else:

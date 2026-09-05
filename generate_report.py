@@ -87,7 +87,7 @@ html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>PayBack — Autonomous Revenue Recovery Report</title>
+<title>PayBack: Autonomous Revenue Recovery Report</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   * {{ box-sizing: border-box; margin: 0; padding: 0; }}
@@ -148,7 +148,7 @@ html = f"""<!DOCTYPE html>
 <body>
 <div class="container">
   <header>
-    <h1>PayBack — Autonomous Revenue Recovery Agent</h1>
+    <h1>PayBack: Autonomous Revenue Recovery Agent</h1>
     <p>Generated on {generated_at} · {total_payments} payments analyzed</p>
   </header>
 
