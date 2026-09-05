@@ -1,15 +1,6 @@
-"""
-Script 2: Payment Failure Diagnosis + Recovery Agent
-------------------------------------------------------
-Reads payments_data.json (from script 1), finds the failed payments,
-and for each one:
-  1. Sends the failure details to Groq (Llama 3.3 70B) to diagnose the root cause
-  2. Asks the model to decide a recovery action: retry, send_reminder, or escalate
-  3. Simulates executing that action
-  4. Logs everything to an audit trail (recovery_log.json)
-
-At the end, prints a summary report: total failed, recovered, amount recovered, success rate.
-"""
+# Script 2 - the actual agent
+# reads payments_data.json, finds failed ones, asks the LLM what happened
+# and what to do about it, then fakes executing that action and logs it all
 
 import os
 import json
@@ -21,16 +12,15 @@ load_dotenv()
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 if not GROQ_API_KEY:
-    raise SystemExit("Missing GROQ_API_KEY in .env — check your .env file.")
+    raise SystemExit("Missing GROQ_API_KEY in .env")
 
 client = Groq(api_key=GROQ_API_KEY)
 
-MODEL = "openai/gpt-oss-120b"
+MODEL = "openai/gpt-oss-120b"  # llama-3.3-70b got deprecated by groq, this is what they recommend now
 
 
 def diagnose_and_decide(payment):
-    """Ask the LLM to diagnose the failure and pick a recovery action."""
-
+    # asking the model to just give back JSON so I can parse it directly
     prompt = f"""You are a payment recovery agent for a fintech company. Analyze this failed payment and respond with ONLY a JSON object, no other text.
 
 Payment details:
@@ -62,13 +52,12 @@ Respond with ONLY this JSON structure, nothing else:
     )
 
     raw = response.choices[0].message.content.strip()
-
-    # Clean up in case the model wraps it in markdown fences
-    raw = raw.replace("```json", "").replace("```", "").strip()
+    raw = raw.replace("```json", "").replace("```", "").strip()  # sometimes it wraps json in markdown anyway
 
     try:
         return json.loads(raw)
     except json.JSONDecodeError:
+        # fallback so one bad response doesn't kill the whole run
         return {
             "diagnosis": "Could not parse model response",
             "recovery_action": "escalate",
@@ -78,22 +67,18 @@ Respond with ONLY this JSON structure, nothing else:
 
 
 def simulate_execute_action(payment, decision):
-    """
-    Simulate executing the recovery action.
-    In a real system this would call Razorpay APIs (e.g. create a new payment link,
-    trigger a retry via order recreation, or push to a support queue).
-    For the hackathon demo we simulate outcomes with realistic success rates per action type.
-    """
+    # not actually hitting Razorpay here, just faking an outcome
+    # would need real retry/checkout APIs for this to actually do something
     import random
 
     action = decision["recovery_action"]
 
     if action == "retry":
-        success = random.random() < 0.55  # retries succeed ~55% of the time
+        success = random.random() < 0.55
     elif action == "send_reminder":
-        success = random.random() < 0.35  # reminders convert ~35% of the time (async, may not resolve immediately)
+        success = random.random() < 0.35
     else:  # escalate
-        success = False  # escalations go to human review, not resolved by the agent
+        success = False
 
     return {
         "action_taken": action,
@@ -134,11 +119,9 @@ def run_pipeline():
             "timestamp": datetime.now().isoformat(),
         })
 
-    # Save audit trail
     with open("recovery_log.json", "w") as f:
         json.dump(audit_log, f, indent=2)
 
-    # Summary report
     total_failed_amount = sum(p["amount"] for p in failed_payments)
     total_recovered = sum(entry["recovered_amount"] for entry in audit_log)
     recovered_count = sum(1 for entry in audit_log if entry["outcome"] == "recovered")

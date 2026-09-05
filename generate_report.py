@@ -1,14 +1,6 @@
-"""
-Script 3: HTML Dashboard Report Generator
---------------------------------------------
-Reads recovery_log.json (produced by diagnose_agent.py) and generates a
-single self-contained HTML file (report.html) with:
-  - Summary cards (total failed, recovered, amount recovered, success rate)
-  - A bar chart: outcome breakdown by recovery action type
-  - A full audit trail table (payment id, diagnosis, action, outcome)
-
-Open report.html in any browser after running this - no server needed.
-"""
+# Script 3 - turns recovery_log.json into an actual html report
+# nothing fancy, just cards + a chart + a table, all in one html file
+# opens straight in a browser, no server needed
 
 import json
 from datetime import datetime
