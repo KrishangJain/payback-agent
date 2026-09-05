@@ -1,0 +1,86 @@
+[
+  {
+    "payment_id": "pay_MOCK1000",
+    "amount": 149900,
+    "original_error": "Card issuing bank declined the transaction.",
+    "diagnosis": "The issuing bank declined the transaction, indicating the payment could not be authorized.",
+    "recovery_action": "send_reminder",
+    "confidence": "high",
+    "reasoning": "A card_declined error suggests the customer must resolve the issue (e.g., insufficient funds or bank block), so a reminder with a payment link is appropriate.",
+    "outcome": "pending",
+    "recovered_amount": 0,
+    "timestamp": "2026-09-05T18:19:25.994602"
+  },
+  {
+    "payment_id": "pay_MOCK1001",
+    "amount": 49900,
+    "original_error": "Card expired.",
+    "diagnosis": "The payment failed because the linked card used for the UPI transaction has expired.",
+    "recovery_action": "send_reminder",
+    "confidence": "high",
+    "reasoning": "An expired card requires the customer to update their payment details, so a reminder with a payment link is appropriate.",
+    "outcome": "pending",
+    "recovered_amount": 0,
+    "timestamp": "2026-09-05T18:19:27.073490"
+  },
+  {
+    "payment_id": "pay_MOCK1002",
+    "amount": 99900,
+    "original_error": "Card expired.",
+    "diagnosis": "The payment failed because the linked card used for the UPI transaction has expired.",
+    "recovery_action": "send_reminder",
+    "confidence": "high",
+    "reasoning": "An expired card requires the customer to update their payment details, so a reminder with a payment link is appropriate.",
+    "outcome": "recovered",
+    "recovered_amount": 99900,
+    "timestamp": "2026-09-05T18:19:27.921436"
+  },
+  {
+    "payment_id": "pay_MOCK1005",
+    "amount": 299900,
+    "original_error": "Card issuing bank declined the transaction.",
+    "diagnosis": "The issuing bank declined the card transaction.",
+    "recovery_action": "send_reminder",
+    "confidence": "high",
+    "reasoning": "A bank decline requires the customer to address the issue (e.g., use a different card or resolve the block), so a reminder with a payment link is appropriate.",
+    "outcome": "pending",
+    "recovered_amount": 0,
+    "timestamp": "2026-09-05T18:19:28.739199"
+  },
+  {
+    "payment_id": "pay_MOCK1007",
+    "amount": 49900,
+    "original_error": "The transaction timed out due to bank server delay.",
+    "diagnosis": "The payment failed because the bank's server delayed, causing a timeout.",
+    "recovery_action": "retry",
+    "confidence": "high",
+    "reasoning": "Bank timeout is typically a transient issue, so retrying the transaction now is likely to succeed.",
+    "outcome": "recovered",
+    "recovered_amount": 49900,
+    "timestamp": "2026-09-05T18:19:29.661335"
+  },
+  {
+    "payment_id": "pay_MOCK1012",
+    "amount": 149900,
+    "original_error": "Card issuing bank declined the transaction.",
+    "diagnosis": "The issuing bank declined the transaction.",
+    "recovery_action": "send_reminder",
+    "confidence": "high",
+    "reasoning": "A bank decline requires the customer to resolve the issue or use an alternative payment method, so a reminder with a payment link is appropriate.",
+    "outcome": "recovered",
+    "recovered_amount": 149900,
+    "timestamp": "2026-09-05T18:19:30.446475"
+  },
+  {
+    "payment_id": "pay_MOCK1013",
+    "amount": 49900,
+    "original_error": "Payment failed due to insufficient funds in the customer's account.",
+    "diagnosis": "The payment failed because the customer's account does not have enough funds.",
+    "recovery_action": "send_reminder",
+    "confidence": "high",
+    "reasoning": "The error explicitly indicates insufficient funds, requiring the customer to add money and retry via a payment link.",
+    "outcome": "pending",
+    "recovered_amount": 0,
+    "timestamp": "2026-09-05T18:19:31.148454"
+  }
+]
