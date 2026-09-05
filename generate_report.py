@@ -35,6 +35,24 @@ recovered_data = [action_counts[a]["recovered"] for a in action_labels]
 pending_data = [action_counts[a]["pending"] for a in action_labels]
 escalated_data = [action_counts[a]["escalated_to_human"] for a in action_labels]
 
+# breakdown by original failure reason
+by_reason = {}
+for payment, entry in zip(failed_payments, log):
+    reason = payment.get("error_reason", "unknown")
+    by_reason.setdefault(reason, {"count": 0, "recovered": 0})
+    by_reason[reason]["count"] += 1
+    if entry["outcome"] == "recovered":
+        by_reason[reason]["recovered"] += 1
+
+reason_rows = ""
+for reason, stats in by_reason.items():
+    reason_rows += f"""
+    <tr>
+      <td style="text-transform:capitalize;">{reason.replace('_',' ')}</td>
+      <td>{stats['count']}</td>
+      <td>{stats['recovered']}</td>
+    </tr>"""
+
 # Build audit trail table rows
 def outcome_badge(outcome):
     colors = {
@@ -156,6 +174,22 @@ html = f"""<!DOCTYPE html>
   <div class="panel">
     <h2>Recovery Outcomes by Action Type</h2>
     <canvas id="outcomeChart"></canvas>
+  </div>
+
+  <div class="panel">
+    <h2>Breakdown by Failure Reason</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Reason</th>
+          <th>Occurrences</th>
+          <th>Recovered</th>
+        </tr>
+      </thead>
+      <tbody>
+        {reason_rows}
+      </tbody>
+    </table>
   </div>
 
   <div class="panel">

@@ -215,6 +215,21 @@ def run_pipeline():
     print(f"Total amount recovered: ₹{total_recovered / 100:,.2f}")
     if len(failed_payments) > 0:
         print(f"Recovery success rate: {(recovered_count / len(failed_payments)) * 100:.1f}%")
+
+    # breakdown by original failure reason - useful to see which failure types
+    # are actually recoverable vs which ones tend to dead-end
+    print("\nBreakdown by failure reason:")
+    by_reason = {}
+    for payment, entry in zip(failed_payments, audit_log):
+        reason = payment.get("error_reason", "unknown")
+        by_reason.setdefault(reason, {"count": 0, "recovered": 0})
+        by_reason[reason]["count"] += 1
+        if entry["outcome"] == "recovered":
+            by_reason[reason]["recovered"] += 1
+
+    for reason, stats in by_reason.items():
+        print(f"  {reason}: {stats['count']} occurrence(s), {stats['recovered']} recovered")
+
     print(f"\nFull audit trail saved to recovery_log.json")
 
 
