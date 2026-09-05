@@ -90,6 +90,53 @@ def apply_retry_cap(payment, decision):
     return decision
 
 
+def second_opinion(payment, first_decision):
+    # if something got escalated, give it one more shot before giving up on it
+    # basically asking the model to look again, but telling it this already failed once
+    prompt = f"""You are a senior payment recovery agent reviewing a case that a junior agent escalated.
+
+Payment details:
+- Payment ID: {payment['id']}
+- Amount: ₹{payment['amount'] / 100}
+- Method: {payment['method']}
+- Error description: {payment.get('error_description', 'unknown')}
+- Retry count so far: {payment.get('retry_count', 0)}
+
+The first agent's diagnosis was: {first_decision['diagnosis']}
+The first agent escalated this because: {first_decision['reasoning']}
+
+Take a second look. Only escalate again if this genuinely needs a human (looks like fraud, or nothing else makes sense). Otherwise pick "retry" or "send_reminder" if you think it's actually recoverable.
+
+Respond with ONLY this JSON structure, nothing else:
+{{
+  "diagnosis": "one sentence, your updated take",
+  "recovery_action": "retry" or "send_reminder" or "escalate",
+  "confidence": "high" or "medium" or "low",
+  "reasoning": "one sentence on why"
+}}"""
+
+    response = client.chat.completions.create(
+        model=MODEL,
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.3,
+        max_tokens=300,
+    )
+
+    raw = response.choices[0].message.content.strip()
+    raw = raw.replace("```json", "").replace("```", "").strip()
+
+    try:
+        return json.loads(raw)
+    except json.JSONDecodeError:
+        # if this also fails to parse, just stick with escalating, don't loop forever
+        return {
+            "diagnosis": first_decision["diagnosis"],
+            "recovery_action": "escalate",
+            "confidence": "low",
+            "reasoning": "second opinion also failed to parse, keeping as escalated",
+        }
+
+
 def simulate_execute_action(payment, decision):
     # not actually hitting Razorpay here, just faking an outcome
     # would need real retry/checkout APIs for this to actually do something
@@ -126,6 +173,12 @@ def run_pipeline():
         decision = diagnose_and_decide(payment)
         decision = apply_confidence_check(decision)
         decision = apply_retry_cap(payment, decision)
+
+        if decision["recovery_action"] == "escalate":
+            print(f"    Escalated - getting a second opinion...")
+            decision = second_opinion(payment, decision)
+            decision = apply_retry_cap(payment, decision)  # in case second opinion says retry on a capped payment
+
         print(f"    Diagnosis: {decision['diagnosis']}")
         print(f"    Action: {decision['recovery_action']} (confidence: {decision['confidence']})")
 

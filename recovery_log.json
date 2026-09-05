@@ -7,10 +7,10 @@
     "diagnosis": "The issuing bank declined the card transaction.",
     "recovery_action": "send_reminder",
     "confidence": "high",
-    "reasoning": "A bank decline requires the customer to resolve the issue (e.g., insufficient funds or card block), so a reminder with a payment link is appropriate.",
+    "reasoning": "A bank decline requires the customer to resolve the issue (e.g., use a different card or contact the bank), so a reminder with a payment link is appropriate.",
     "outcome": "pending",
     "recovered_amount": 0,
-    "timestamp": "2026-09-05T19:18:49.059846"
+    "timestamp": "2026-09-05T19:20:02.009416"
   },
   {
     "payment_id": "pay_MOCK1001",
@@ -20,36 +20,36 @@
     "diagnosis": "The payment failed because the bank's server delayed, causing a timeout.",
     "recovery_action": "retry",
     "confidence": "high",
-    "reasoning": "Bank timeout is a transient issue; retrying the transaction now is likely to succeed.",
+    "reasoning": "Bank timeout is a transient issue, so retrying the payment now is likely to succeed.",
     "outcome": "recovered",
     "recovered_amount": 149900,
-    "timestamp": "2026-09-05T19:18:49.862424"
+    "timestamp": "2026-09-05T19:20:02.719779"
   },
   {
     "payment_id": "pay_MOCK1002",
     "amount": 199900,
     "original_error": "Card expired.",
     "retry_count": 1,
-    "diagnosis": "The payment failed because the linked card is expired.",
+    "diagnosis": "The payment failed because the linked card used for netbanking is expired.",
     "recovery_action": "send_reminder",
     "confidence": "high",
-    "reasoning": "An expired card requires the customer to update their payment method, so a reminder with a payment link is appropriate.",
-    "outcome": "recovered",
-    "recovered_amount": 199900,
-    "timestamp": "2026-09-05T19:18:50.579300"
+    "reasoning": "An expired card requires the customer to update their payment details, so a reminder with a payment link is appropriate.",
+    "outcome": "pending",
+    "recovered_amount": 0,
+    "timestamp": "2026-09-05T19:20:03.550669"
   },
   {
     "payment_id": "pay_MOCK1007",
     "amount": 199900,
     "original_error": "Card issuing bank declined the transaction.",
     "retry_count": 0,
-    "diagnosis": "The issuing bank declined the transaction.",
+    "diagnosis": "The issuing bank declined the transaction, indicating the card was rejected.",
     "recovery_action": "send_reminder",
     "confidence": "high",
-    "reasoning": "A bank decline indicates the customer must resolve the issue (e.g., insufficient funds or card restrictions), so a payment link reminder is appropriate.",
+    "reasoning": "A decline requires the customer to resolve the issue (e.g., ensure sufficient funds or use a different payment method), so a reminder with a payment link is appropriate.",
     "outcome": "pending",
     "recovered_amount": 0,
-    "timestamp": "2026-09-05T19:18:51.500739"
+    "timestamp": "2026-09-05T19:20:04.423971"
   },
   {
     "payment_id": "pay_MOCK1008",
@@ -59,10 +59,10 @@
     "diagnosis": "The payment failed because the user entered an incorrect OTP.",
     "recovery_action": "send_reminder",
     "confidence": "high",
-    "reasoning": "The error is user\u2011initiated (otp_failed), so prompting the customer with a payment link to retry with the correct OTP is the appropriate next step.",
+    "reasoning": "OTP failure requires the customer to provide the correct OTP, so sending a payment link reminder is the appropriate action.",
     "outcome": "recovered",
     "recovered_amount": 149900,
-    "timestamp": "2026-09-05T19:18:52.320110"
+    "timestamp": "2026-09-05T19:20:05.072542"
   },
   {
     "payment_id": "pay_MOCK1013",
@@ -75,7 +75,7 @@
     "reasoning": "Insufficient funds require the customer to add money or choose another payment method, so a reminder with a payment link is appropriate.",
     "outcome": "recovered",
     "recovered_amount": 199900,
-    "timestamp": "2026-09-05T19:18:53.142587"
+    "timestamp": "2026-09-05T19:20:05.842730"
   },
   {
     "payment_id": "pay_MOCK1014",
@@ -86,8 +86,8 @@
     "recovery_action": "send_reminder",
     "confidence": "high",
     "reasoning": "An expired card requires the customer to update their payment method, so a reminder with a payment link is appropriate.",
-    "outcome": "pending",
-    "recovered_amount": 0,
-    "timestamp": "2026-09-05T19:18:53.958898"
+    "outcome": "recovered",
+    "recovered_amount": 149900,
+    "timestamp": "2026-09-05T19:20:06.661369"
   }
 ]
