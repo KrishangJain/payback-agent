@@ -58,6 +58,7 @@ def generate_mock_payments(n=15):
             "email": f"customer{i}@example.com",
             "contact": f"+91900000{1000+i}",
             "created_at": int(datetime.now().timestamp()) - (i * 3600),
+            "retry_count": random.choice([0, 0, 0, 1, 1, 2]),  # most payments haven't been retried yet, a few have
         }
         if is_failed:
             reason = random.choice(fail_reasons)

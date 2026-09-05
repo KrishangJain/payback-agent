@@ -76,6 +76,20 @@ def apply_confidence_check(decision):
     return decision
 
 
+MAX_RETRIES = 2
+
+
+def apply_retry_cap(payment, decision):
+    # don't let the agent keep retrying the same payment forever
+    # if it's already been retried MAX_RETRIES times, force it to a human instead
+    retry_count = payment.get("retry_count", 0)
+    if decision["recovery_action"] == "retry" and retry_count >= MAX_RETRIES:
+        decision["original_action"] = decision["recovery_action"]
+        decision["recovery_action"] = "escalate"
+        decision["reasoning"] += f" (already retried {retry_count} times, escalating instead)"
+    return decision
+
+
 def simulate_execute_action(payment, decision):
     # not actually hitting Razorpay here, just faking an outcome
     # would need real retry/checkout APIs for this to actually do something
@@ -111,6 +125,7 @@ def run_pipeline():
 
         decision = diagnose_and_decide(payment)
         decision = apply_confidence_check(decision)
+        decision = apply_retry_cap(payment, decision)
         print(f"    Diagnosis: {decision['diagnosis']}")
         print(f"    Action: {decision['recovery_action']} (confidence: {decision['confidence']})")
 
@@ -121,6 +136,7 @@ def run_pipeline():
             "payment_id": payment["id"],
             "amount": payment["amount"],
             "original_error": payment.get("error_description", "unknown"),
+            "retry_count": payment.get("retry_count", 0),
             "diagnosis": decision["diagnosis"],
             "recovery_action": decision["recovery_action"],
             "confidence": decision["confidence"],
