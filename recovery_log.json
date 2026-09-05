@@ -3,13 +3,13 @@
     "payment_id": "pay_MOCK1002",
     "amount": 149900,
     "original_error": "Payment failed due to insufficient funds in the customer's account.",
-    "diagnosis": "The payment failed because the customer's account does not have enough funds.",
+    "diagnosis": "The payment failed because the customer's account has insufficient funds.",
     "recovery_action": "send_reminder",
     "confidence": "high",
-    "reasoning": "Insufficient funds requires the customer to add funds or choose another payment method, so a reminder with a payment link is appropriate.",
+    "reasoning": "Insufficient funds requires the customer to add money or use another payment method, so a reminder with a payment link is appropriate.",
     "outcome": "pending",
     "recovered_amount": 0,
-    "timestamp": "2026-09-05T18:37:26.625207"
+    "timestamp": "2026-09-05T19:17:24.174307"
   },
   {
     "payment_id": "pay_MOCK1003",
@@ -18,10 +18,10 @@
     "diagnosis": "The payment failed because the user entered an incorrect OTP.",
     "recovery_action": "send_reminder",
     "confidence": "high",
-    "reasoning": "OTP failure is a user action issue, so sending a reminder with a new payment link is the appropriate next step.",
-    "outcome": "pending",
-    "recovered_amount": 0,
-    "timestamp": "2026-09-05T18:37:27.408546"
+    "reasoning": "OTP failure requires user action to provide the correct OTP, so a reminder with a payment link is appropriate.",
+    "outcome": "recovered",
+    "recovered_amount": 199900,
+    "timestamp": "2026-09-05T19:17:24.831770"
   },
   {
     "payment_id": "pay_MOCK1007",
@@ -30,45 +30,45 @@
     "diagnosis": "The issuing bank declined the transaction.",
     "recovery_action": "send_reminder",
     "confidence": "high",
-    "reasoning": "A bank decline requires the customer to resolve the issue (e.g., check funds or use another payment method), so a reminder with a payment link is appropriate.",
-    "outcome": "recovered",
-    "recovered_amount": 99900,
-    "timestamp": "2026-09-05T18:37:28.189835"
+    "reasoning": "A bank decline requires the customer to take action, such as using a different payment method or contacting their bank.",
+    "outcome": "pending",
+    "recovered_amount": 0,
+    "timestamp": "2026-09-05T19:17:25.691204"
   },
   {
     "payment_id": "pay_MOCK1012",
     "amount": 299900,
+    "original_error": "The transaction timed out due to bank server delay.",
+    "diagnosis": "The payment failed because the bank's server did not respond in time, causing a timeout.",
+    "recovery_action": "retry",
+    "confidence": "high",
+    "reasoning": "Bank timeouts are typically transient issues, so attempting the payment again now is likely to succeed.",
+    "outcome": "pending",
+    "recovered_amount": 0,
+    "timestamp": "2026-09-05T19:17:26.920784"
+  },
+  {
+    "payment_id": "pay_MOCK1013",
+    "amount": 149900,
     "original_error": "The transaction timed out due to bank server delay.",
     "diagnosis": "The payment failed because the bank's server delayed, causing a timeout.",
     "recovery_action": "retry",
     "confidence": "high",
     "reasoning": "Bank timeout is typically a transient issue, so retrying the payment now is likely to succeed.",
     "outcome": "recovered",
-    "recovered_amount": 299900,
-    "timestamp": "2026-09-05T18:37:28.945273"
-  },
-  {
-    "payment_id": "pay_MOCK1013",
-    "amount": 149900,
-    "original_error": "The transaction timed out due to bank server delay.",
-    "diagnosis": "The transaction failed because the bank's server delayed, causing a timeout.",
-    "recovery_action": "retry",
-    "confidence": "high",
-    "reasoning": "Bank timeouts are typically transient, so a immediate retry is likely to succeed.",
-    "outcome": "recovered",
     "recovered_amount": 149900,
-    "timestamp": "2026-09-05T18:37:29.575304"
+    "timestamp": "2026-09-05T19:17:27.595358"
   },
   {
     "payment_id": "pay_MOCK1014",
     "amount": 99900,
     "original_error": "Card expired.",
-    "diagnosis": "The payment failed because the card used is expired.",
+    "diagnosis": "The payment failed because the customer's card is expired.",
     "recovery_action": "send_reminder",
     "confidence": "high",
-    "reasoning": "An expired card requires the customer to update their payment details, so a reminder with a payment link is appropriate.",
-    "outcome": "recovered",
-    "recovered_amount": 99900,
-    "timestamp": "2026-09-05T18:37:31.260326"
+    "reasoning": "An expired card requires the customer to update their payment method, so a reminder with a payment link is appropriate.",
+    "outcome": "pending",
+    "recovered_amount": 0,
+    "timestamp": "2026-09-05T19:17:28.455666"
   }
 ]

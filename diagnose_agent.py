@@ -66,6 +66,16 @@ Respond with ONLY this JSON structure, nothing else:
         }
 
 
+def apply_confidence_check(decision):
+    # if the model isn't confident, don't trust its action - escalate instead
+    # a "retry" with low confidence could waste an attempt, better to be safe
+    if decision["confidence"] == "low" and decision["recovery_action"] != "escalate":
+        decision["original_action"] = decision["recovery_action"]
+        decision["recovery_action"] = "escalate"
+        decision["reasoning"] += " (overridden to escalate due to low confidence)"
+    return decision
+
+
 def simulate_execute_action(payment, decision):
     # not actually hitting Razorpay here, just faking an outcome
     # would need real retry/checkout APIs for this to actually do something
@@ -100,6 +110,7 @@ def run_pipeline():
         print(f"[{i}/{len(failed_payments)}] Processing {payment['id']}...")
 
         decision = diagnose_and_decide(payment)
+        decision = apply_confidence_check(decision)
         print(f"    Diagnosis: {decision['diagnosis']}")
         print(f"    Action: {decision['recovery_action']} (confidence: {decision['confidence']})")
 
